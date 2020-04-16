@@ -1,0 +1,137 @@
+import React, { Component } from 'react';
+import axios from "axios";
+import {Redirect} from 'react-router-dom';
+import {addOdmor} from "../actions/odmor";
+import {getZaposleni} from '../actions/odmor';
+import {connect} from "react-redux";
+import PropTypes from 'prop-types';
+
+class Obrazac extends Component{
+	constructor(){
+		super();
+		this.state = {
+			zaposleni:[],
+			ime_prezime:"",
+			date_poc:"",
+			date_kra:"",
+			date_prvi_dan:"",
+			prilog:null,
+			control:false
+		}
+		this.handeChangeInput = this.handeChangeInput.bind(this)
+		this.handeSubmit = this.handeSubmit.bind(this)
+	}
+	componentDidMount(){
+		this.props.getZaposleni();
+	}
+	
+	handeChangeInput(e){
+		if(e.target.name==='prilog'){
+			this.setState({[e.target.name]:e.target.files[0]})
+		}else{
+			this.setState({[e.target.name]:e.target.value})
+		}
+	}
+	handeSubmit(e){
+		e.preventDefault();
+		var id = 0;
+		var ime = this.state.ime_prezime;
+		if(!this.state.ime_prezime){
+			var e = document.getElementById('selectField');
+			 ime = e.options[e.selectedIndex].value;
+		}
+		this.props.zaposleniList.map((item,index)=>{
+			var naziv = item.ime + " "+item.prezime;
+			if(ime === naziv){
+				id=item.id;
+			}
+		})
+
+		let form_data = new FormData();
+		if(this.state.prilog){
+			form_data.append("prilog",this.state.prilog,this.state.prilog.name);
+		}
+		form_data.append("poc_odmora",this.state.date_poc);
+		form_data.append("kraj_odmora",this.state.date_kra);
+		form_data.append("prvi_radni_dan",this.state.date_prvi_dan);
+		form_data.append("zaposleni",id);
+
+		// console.log("OVO JE DATA" +this.state.date_poc+" " +this.state.date_kra+" " +this.state.date_prvi_dan,id);
+		this.props.addOdmor(form_data,ime);
+		// axios.post("http://localhost:8000/odmor/create/",form_data)
+		// .then(response=>{
+		// 	console.log(response)
+		// 	this.setState({
+		// 		ime_prezime:"",
+		// 		date_poc:"",
+		// 		date_kra:"",
+		// 		date_prvi_dan:"",
+		// 	})
+		// })
+		// .catch(error=>{
+		// 	console.log(error)
+		// })
+		 this.setState({control:true})
+	}
+	render(){	
+		if(this.state.control){
+			return <Redirect to='/' />
+		}
+		const options = this.props.zaposleniList.map((item)=>{
+			if(item.id==1){
+				return <option key={item.id} selected>{item.ime+" "+item.prezime}</option>
+			}
+			return <option key={item.id}>{item.ime+" "+item.prezime}</option>
+		})
+		return(
+			<div className="obrazac_form">
+			<fieldset className="border p-2">
+				<legend className="w-auto">Obrazac</legend>
+				<form onSubmit={this.handeSubmit}>
+					<div className="form-group">
+						<label>Zaposleni: </label>
+						<select name='ime_prezime' value={this.state.ime_prezime} onChange={this.handeChangeInput} id='selectField' className="form-control">
+			            	{options}
+			          </select>
+					</div>
+					<div className="form-group">
+						<label>Pocetak odmora</label>
+						<input name='date_poc' type="date" className="form-control" className="form-control"
+						value={this.state.date_poc} 
+						onChange={this.handeChangeInput} />
+					</div>
+					<div className="form-group">
+						<label>Kraj odmora</label>
+						<input name='date_kra' type="date" className="form-control" 
+						value={this.state.date_kra}
+						onChange={this.handeChangeInput}/>
+					</div>
+					<div className="form-group">
+						<label>Prvi radni dan</label>
+						<input name='date_prvi_dan' type="date" className="form-control" 
+						value={this.state.date_prvi_dan}
+						onChange={this.handeChangeInput}/>
+					</div>
+					<div className="form-group">
+						<label>Prilog</label>
+						<input type='file' name='prilog' onChange={this.handeChangeInput} className="form-control"/>
+					</div>
+					<div className="form-group">
+					<input type='Submit' value='Submit' className="btn btn-outline-primary" />
+					</div>
+				</form>
+			</fieldset>
+			</div>
+		);
+	}
+};
+
+Obrazac.propTypes = {
+	zaposleniList:PropTypes.array.isRequired,
+	getZaposleni:PropTypes.func.isRequired,
+	addOdmor:PropTypes.func.isRequired
+}
+const mapStateToProps = state=>({
+	zaposleniList:state.odmor.zaposleni
+});
+export default connect(mapStateToProps,{getZaposleni,addOdmor})(Obrazac);
