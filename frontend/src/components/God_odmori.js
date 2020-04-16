@@ -2,44 +2,17 @@ import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {checkStatus} from "../actions/auth";
+import {loadUser} from "../actions/auth";
 import {Link, withRouter} from 'react-router-dom';
 import {fetchData} from '../actions/odmor';
 
 class God_odmori extends Component{
-	constructor(){
-		super();
-		this.state = {
-			odmori:[],
-		}
-	}
+
 	componentDidMount(){
 		this.props.fetchData();
-		if(!this.props.isAuthenticated){
-			this.props.checkStatus();
-		}
-	}
-	static getDerivedStateFromProps(nextProps,prevState) {
-		if(nextProps.odmorList !== prevState.odmori){
-			return{
-				odmori:nextProps.odmorList
-			}
-		}
-		return null;
+		this.props.loadUser();
 	}
 
-	renderTableHeader(){
-		let header = ['ime','prezime','Poc_odmora','Kraj_odmora','Prvi_dan','status_zahteva','odobrio','prilog','action']
-		if(!this.props.isAuthenticated){
-			header.splice(8,1);
-		}
-		return header.map((item)=>{
-			if(item === 'action'){
-				return <th colSpan="2" key={item.id}>{item.toUpperCase()}</th>
-			}
-			return <th key={item.id}>{item.toUpperCase()}</th>
-		})
-	}
 	getStyle(item){
 		if(item.status_zahtjeva=='Planiran'){
 			return{
@@ -56,10 +29,22 @@ class God_odmori extends Component{
 		  }
 	}
 	render(){
-		const table = this.state.odmori.map((item)=>{
+		// table header
+		let header = ['ime','prezime','Poc_odmora','Kraj_odmora','Prvi_dan','status_zahteva','odobrio','prilog','action'];
+		if(!this.props.isAuthenticated){
+			header.splice(8,1);
+		}
+		const table_header = header.map((item)=>{
+			if(item === 'action'){
+				return <th key={item.id} colSpan="2" >{item.toUpperCase()}</th>
+			}
+			return <th key={item.id}>{item.toUpperCase()}</th>
+		})
+		// table
+		const table = this.props.odmorList.map((item)=>{
 			const {
 				zaposleni,poc_odmora,kraj_odmora,prvi_radni_dan,
-					status_zahtjeva,odobrio,prilog
+				status_zahtjeva,odobrio,prilog
 				} = item
 			let prilog_url= "";
 			let priglo_title="";
@@ -86,12 +71,12 @@ class God_odmori extends Component{
 					{this.props.isAuthenticated?<td><Link className='btn btn-secondary' to={link_delete}>Delete</Link></td>:""}
 				</tr>	
 			)
-		})
+		});
 		return(
 			<div id='odmori'>
 				<table id='god_odmori_table' className='table-striped table-bordered'>
 					<tbody>
-						<tr>{this.renderTableHeader()}</tr>
+						{table_header}
 						{table}
 					</tbody>
 				</table>
@@ -102,11 +87,11 @@ class God_odmori extends Component{
 
 God_odmori.propTypes = {
 	isAuthenticated:PropTypes.bool,
-	checkStatus:PropTypes.func.isRequired,
+	loadUser:PropTypes.func.isRequired,
 	odmorList:PropTypes.array.isRequired
 }
 const mapStateToProps = state =>({
 	isAuthenticated:state.auth.isAuthenticated,
 	odmorList:state.odmor.odmorList
 })
-export default connect(mapStateToProps,{checkStatus,fetchData})(God_odmori)
+export default connect(mapStateToProps,{loadUser,fetchData})(God_odmori)

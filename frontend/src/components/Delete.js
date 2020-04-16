@@ -23,6 +23,10 @@ class Delete extends Component{
 			return{
 				odmorDetail:nextProps.itemDetail
 			}
+		}else if(nextProps.controlSwitch !== prevState.control){
+			return{
+				control:nextProps.controlSwitch
+			}
 		}
 		return null;
 	}
@@ -53,7 +57,6 @@ class Delete extends Component{
 		}
 
 		this.props.deleteData(objekat);
-		this.setState({control:true});
 
 	}
 	
@@ -108,11 +111,13 @@ Delete.propTypes = {
 	getDetail:PropTypes.func.isRequired,
 	itemDetail:PropTypes.object.isRequired,
 	zaposleniList:PropTypes.array.isRequired,
-	deleteData:PropTypes.func.isRequired
+	deleteData:PropTypes.func.isRequired,
+	controlSwitch:PropTypes.bool
 }
 const mapStateToProps = state=>({
 	isAuthenticated:state.auth.isAuthenticated,
 	itemDetail:state.odmor.detail,
-	zaposleniList:state.odmor.zaposleni
+	zaposleniList:state.odmor.zaposleni,
+	controlSwitch:state.odmor.controlSwitch
 });
 export default connect(mapStateToProps,{getDetail,getZaposleni,deleteData})(Delete);

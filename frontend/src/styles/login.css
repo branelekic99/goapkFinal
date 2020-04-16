@@ -1,0 +1,20 @@
+.login_form h1{
+    text-align: center;
+    width: 50%;
+    margin: auto;
+}
+
+.login_form form .form-box{
+   display: flex;
+   width: 50%;
+   margin:20px auto;
+
+}
+.login_form form .form-box input{
+    margin-left: 10px;
+    
+}
+.login_form .submit_box input{
+    width: 50%;
+    margin: auto;
+}

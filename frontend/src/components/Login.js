@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {loginUser} from "../actions/auth";
 import {Redirect} from 'react-router-dom';
+import "../styles/login.css";
 
 class Login extends Component{
     constructor(){
@@ -33,7 +34,7 @@ class Login extends Component{
             <div className="login_form">
                     <h1>Login Please!</h1><hr className="hr_line"/>
                     <form onSubmit={this.handleSubmit}>
-                        <div className="form-group box">
+                        <div className="form-group form-box">
                             <i className="far fa-user fa-2x"></i>
                             <input type='text' 
                             name='username' 
@@ -42,7 +43,7 @@ class Login extends Component{
                             placeholder="Username"
                             className="form-control"/>
                         </div>
-                        <div className="form-group box">
+                        <div className="form-group form-box">
                             <i className="fas fa-lock fa-2x"></i>
                             <input type='password' 
                             name='password' 

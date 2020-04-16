@@ -11,8 +11,7 @@ class Edit extends Component{
 		super(props);
 		this.state={
 			zaposleni:[],
-			detailObj:{},
-			control:false,
+			detailObj:{}
 		}
 		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -27,10 +26,12 @@ class Edit extends Component{
 			this.setState({detailObj:nextProps.itemDetail})
 		}
 	}
+	
 	handleChange(e){
 		const {name,value} = e.target;
 		var obj = {...this.state.detailObj}
 		obj[name] = value;
+		console.log(obj)
 		this.setState({detailObj:obj})
 	}
 	handleSubmit(e){
@@ -53,9 +54,9 @@ class Edit extends Component{
 		    "odobrio":this.state.detailObj.odobrio,
 		}
 		this.props.updateDetail(objekat);
-		this.setState({control:true})
 	}
 	render(){
+		// console.log(this.state.detailObj)
 		if(!this.props.isAuthenticated || this.state.control){
 			return <Redirect to='/'/>
 		}
@@ -110,11 +111,13 @@ Edit.propTypes = {
 	itemDetail:PropTypes.object.isRequired,
 	zaposleniList:PropTypes.array.isRequired,
 	getZaposleni:PropTypes.func.isRequired,
-	updateDetail:PropTypes.func.isRequired
+	updateDetail:PropTypes.func.isRequired,
+	controlSwitch:PropTypes.bool
 }
 const mapStateToProps = state=>({
 	isAuthenticated:state.auth.isAuthenticated,
 	itemDetail:state.odmor.detail,
-	zaposleniList:state.odmor.zaposleni
+	zaposleniList:state.odmor.zaposleni,
+	controlSwitch:state.odmor.controlSwitch
 });
 export default connect(mapStateToProps,{getDetail,getZaposleni,updateDetail})(Edit);

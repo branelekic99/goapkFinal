@@ -1,17 +1,31 @@
 import React , { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+
+import {logOut} from "../actions/auth";
+import "../styles/nav.css";
 var NavLink = require('react-router-dom').NavLink;
 
 
 class Navigation extends Component{
+	constructor(){
+		super();
+		this.state = {
+			isAuthenticated:false
+		}
+	}
 	
-	componentWillReceiveProps(nextProps){
-		console.log("OVO JE NEXT PROPS" +nextProps)
+	static getDerivedStateFromProps(nextProps,prevState) {
+		if(nextProps.isAuthenticated !== prevState.isAuthenticated){
+			return{
+				isAuthenticated:nextProps.isAuthenticated
+			}
+		}
+		return null;
 	}
 	render(){
 		const logout_btn = (
-			<div><button>Logout</button></div>
+			<div><button onClick={this.props.logOut} className="btn btn-warning logout-btn">Logout</button></div>
 		);
 		return(
 			<div className="navigation">
@@ -30,7 +44,7 @@ class Navigation extends Component{
 					<NavLink  activeClassName ='nav_active' to='/obrazac' className="link">
 							Zahtjev
 					</NavLink>
-					{this.props.isAuthenticated?logout_btn:""}
+					{this.state.isAuthenticated?logout_btn:""}
 				</div>
 				
 			</div>
@@ -38,9 +52,10 @@ class Navigation extends Component{
 	}
 };
 Navigation.propTypes = {
-    isAuthenticated:PropTypes.bool
+	isAuthenticated:PropTypes.bool,
+	logOut:PropTypes.func.isRequired
 }
 const mapStateToProps = state =>({
     isAuthenticated:state.auth.isAuthenticated
 })
-export default connect(null,{})(Navigation)
+export default connect(mapStateToProps,{logOut})(Navigation)

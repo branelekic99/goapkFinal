@@ -1,4 +1,4 @@
-import {LOGIN_SUCCESS,AUTH_ERROR,LOGOUT,CHECK_STATUS} from "./types";
+import {LOGIN_SUCCESS,AUTH_ERROR,LOGOUT,LOAD_USER} from "./types";
 import axios from 'axios';
 
 //LOGIN FUNCTION
@@ -13,11 +13,10 @@ export function loadUser(){
                 "Authorization":header
             }
         })
-        .then(result=>{
-            console.log(result)
-        })
+        .then(result=>dispatch({
+            type:LOAD_USER
+        }))
         .catch(err=>{
-            console.log(err);
             dispatch({
                 type:AUTH_ERROR
             })
@@ -44,7 +43,7 @@ export function logOut(){
     return function(dispatch,getState){
         const token = getState().auth.token;
         const header = "Token "+ token;
-        axios("http://localhost:8000/api/auth/user",null,{
+        axios.post("http://localhost:8000/api/auth/logout",null,{
             headers:{
                 'Content-Type':'aplication/json',
                 "Authorization":header
@@ -56,16 +55,5 @@ export function logOut(){
         .catch(err=>{
             console.log(err);
         })
-    }
-};
-
-export function checkStatus(){
-    return function(dispatch,getState){
-        const token = getState().auth.token;
-        if(token!=null){
-            dispatch({
-                type:CHECK_STATUS
-            })
-        }
     }
 };

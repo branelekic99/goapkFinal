@@ -24,7 +24,14 @@ class Obrazac extends Component{
 	componentDidMount(){
 		this.props.getZaposleni();
 	}
-	
+	static getDerivedStateFromProps(nextProps,prevState) {
+		if(nextProps.controlSwitch !== prevState.control){
+			return{
+				control:nextProps.controlSwitch
+			}
+		}
+		return null;
+	}
 	handeChangeInput(e){
 		if(e.target.name==='prilog'){
 			this.setState({[e.target.name]:e.target.files[0]})
@@ -56,24 +63,12 @@ class Obrazac extends Component{
 		form_data.append("prvi_radni_dan",this.state.date_prvi_dan);
 		form_data.append("zaposleni",id);
 
-		// console.log("OVO JE DATA" +this.state.date_poc+" " +this.state.date_kra+" " +this.state.date_prvi_dan,id);
+		
 		this.props.addOdmor(form_data,ime);
-		// axios.post("http://localhost:8000/odmor/create/",form_data)
-		// .then(response=>{
-		// 	console.log(response)
-		// 	this.setState({
-		// 		ime_prezime:"",
-		// 		date_poc:"",
-		// 		date_kra:"",
-		// 		date_prvi_dan:"",
-		// 	})
-		// })
-		// .catch(error=>{
-		// 	console.log(error)
-		// })
-		 this.setState({control:true})
+		// setTimeout(()=>this.setState({control:true}), 1000);
 	}
-	render(){	
+	
+	render(){
 		if(this.state.control){
 			return <Redirect to='/' />
 		}
@@ -129,9 +124,11 @@ class Obrazac extends Component{
 Obrazac.propTypes = {
 	zaposleniList:PropTypes.array.isRequired,
 	getZaposleni:PropTypes.func.isRequired,
-	addOdmor:PropTypes.func.isRequired
+	addOdmor:PropTypes.func.isRequired,
+	controlSwitch:PropTypes.bool
 }
 const mapStateToProps = state=>({
-	zaposleniList:state.odmor.zaposleni
+	zaposleniList:state.odmor.zaposleni,
+	controlSwitch:state.odmor.controlSwitch
 });
 export default connect(mapStateToProps,{getZaposleni,addOdmor})(Obrazac);

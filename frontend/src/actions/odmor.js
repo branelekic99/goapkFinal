@@ -91,7 +91,6 @@ export function deleteData(obj){
 
 export function addOdmor(obj,ime){
     return function(dispatch){
-        console.log(ime)
         axios.post("http://localhost:8000/odmor/create/",obj)
         .then(response=>{
             response.data.zaposleni=ime

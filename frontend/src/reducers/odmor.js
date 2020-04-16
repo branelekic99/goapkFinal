@@ -2,7 +2,9 @@ import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR} f
 const initialState = {
     odmorList:[],
     detail:{},
-    zaposleni:[]
+    zaposleni:[],
+    controlSwitch:false,
+    message:false
 }
 
 export default function(state=initialState,action){
@@ -10,7 +12,8 @@ export default function(state=initialState,action){
         case ODMOR_LIST:
             return {
                 ...state,
-                odmorList:action.payload
+                odmorList:action.payload,
+                controlSwitch:false
             }
         case ODMOR_DETIAL:
             return{
@@ -18,9 +21,12 @@ export default function(state=initialState,action){
                 detail:action.payload
             }
         case ADD_OMDOR:
+            const item = action.payload;
+            const new_list = state.odmorList.concat(item)
             return{
                 ...state,
-                odmorList:state.odmorList.concat(action.payload)
+                odmorList:new_list,
+                controlSwitch:true
             }
         case ODMOR_UPDATE:
             const obj = state.odmorList.map((item)=>{
@@ -38,11 +44,12 @@ export default function(state=initialState,action){
                 odmorList:obj
             }
         case ODMOR_DELETE:
-            var pom_obj = state.odmorList;
-            pom_obj = pom_obj.filter((item)=>item.id !== action.payload)
+            var id = parseInt(action.payload);
+            const pom_obj = state.odmorList.filter(item=>item !== id);
             return {
                 ...state,
-                odmorList:pom_obj
+                odmorList:pom_obj,
+                controlSwitch:true
             }
         case ZAPOSLENI:
             return{
