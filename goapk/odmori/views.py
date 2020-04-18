@@ -12,7 +12,7 @@ from rest_framework.generics import (
 from rest_framework import permissions
 from rest_framework.mixins import DestroyModelMixin,UpdateModelMixin
 from rest_framework.response import Response
-
+from .pagionation import OdmorPagination
 
 class GOCreateAPIView(CreateAPIView):
 	queryset = God_odmori.objects.all()
@@ -24,6 +24,7 @@ class GOCreateAPIView(CreateAPIView):
 class GOListAPIView(ListAPIView):
 	queryset = God_odmori.objects.all().order_by('-id')
 	serializer_class = God_odmoriSerializer
+	pagination_class = OdmorPagination
 
 class GODetailAPIView(RetrieveAPIView):
 	queryset = God_odmori.objects.all()

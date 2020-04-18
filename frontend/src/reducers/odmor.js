@@ -1,6 +1,9 @@
-import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR} from "../actions/types";
+import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH} from "../actions/types";
 const initialState = {
     odmorList:[],
+    count:0,
+    next:null,
+    previous:null,
     detail:{},
     zaposleni:[],
     controlSwitch:false,
@@ -9,10 +12,18 @@ const initialState = {
 
 export default function(state=initialState,action){
     switch(action.type){
+        case CONTROL_SWITCH:
+            return {
+                ...state,
+                controlSwitch:false
+            }
         case ODMOR_LIST:
             return {
                 ...state,
-                odmorList:action.payload,
+                odmorList:action.payload.results,
+                count:action.payload.count,
+                next:action.payload.next,
+                previous:action.payload.previous,
                 controlSwitch:false
             }
         case ODMOR_DETIAL:

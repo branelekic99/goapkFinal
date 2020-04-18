@@ -1,4 +1,4 @@
-import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR} from "../actions/types";
+import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH} from "../actions/types";
 import axios from "axios";
 
 
@@ -25,7 +25,7 @@ export function getDetail(id){
 
 export function getZaposleni(){
     return function(dispatch){
-        axios.get("http://localhost:8000/zaposleni/")
+        axios.get("zaposleni/")
         .then(result=>dispatch({
             type:ZAPOSLENI,
             payload:result.data
@@ -57,7 +57,7 @@ export function updateDetail(obj){
 
 export function fetchData(){
     return function(dispatch){
-        axios.get("http://localhost:8000/odmor/list/")
+        fetch("localhost:8000/odmor/list/")
         .then(result=>{
             dispatch({
                 type:ODMOR_LIST,
@@ -67,6 +67,13 @@ export function fetchData(){
         .catch(err=>console.log(err))
     }
 };
+export function controlSwitch(){
+    return function(dispatch){
+        dispatch({
+            type:CONTROL_SWITCH
+        })
+    }
+}
 
 export function deleteData(obj){
     return function(dispatch,getState){

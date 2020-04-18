@@ -5,14 +5,40 @@ import PropTypes from 'prop-types';
 import {loadUser} from "../actions/auth";
 import {Link, withRouter} from 'react-router-dom';
 import {fetchData} from '../actions/odmor';
+import axios from 'axios';
+import {controlSwitch} from "../actions/odmor";
 
 class God_odmori extends Component{
 
+	constructor(){
+		super();
+		this.state={
+			odmorList:[],
+			count:0,
+			next:null,
+			previous:null,
+			currentPage:1,
+		}
+		this.fetchData = this.fetchData.bind(this);
+	}
 	componentDidMount(){
-		this.props.fetchData();
+		this.props.controlSwitch();
+		this.fetchData("http://localhost:8000/odmor/list",1);
 		this.props.loadUser();
 	}
-
+	fetchData(url,pageNumber){
+		axios.get(url)
+		.then(result=>{
+				this.setState({
+					odmorList:result.data.results,
+					count:result.data.count,
+					next:result.data.next,
+					previous:result.data.previous,
+					currentPage:pageNumber
+				})
+		})
+		.catch(err=>console.log(err))
+	}
 	getStyle(item){
 		if(item.status_zahtjeva=='Planiran'){
 			return{
@@ -28,6 +54,7 @@ class God_odmori extends Component{
 			  }
 		  }
 	}
+	
 	render(){
 		// table header
 		let header = ['ime','prezime','Poc_odmora','Kraj_odmora','Prvi_dan','status_zahteva','odobrio','prilog','action'];
@@ -41,36 +68,65 @@ class God_odmori extends Component{
 			return <th key={item.id}>{item.toUpperCase()}</th>
 		})
 		// table
-		const table = this.props.odmorList.map((item)=>{
-			const {
-				zaposleni,poc_odmora,kraj_odmora,prvi_radni_dan,
-				status_zahtjeva,odobrio,prilog
-				} = item
-			let prilog_url= "";
-			let priglo_title="";
-			if (!prilog){
-				prilog_url = "#";
-				priglo_title = "Nema";
+			const table = this.state.odmorList.map((item)=>{
+				const {
+					zaposleni,poc_odmora,kraj_odmora,prvi_radni_dan,
+					status_zahtjeva,odobrio,prilog
+					} = item
+				let prilog_url= "";
+				let priglo_title="";
+				if (!prilog){
+					prilog_url = "#";
+					priglo_title = "Nema";
+				}else{
+					prilog_url = prilog;
+					priglo_title = "Prilog";
+				}
+				const link_edit ='edit/'+item.id;
+				const link_delete='delete/'+item.id;
+				return(
+					<tr key={item.id} style={this.getStyle(item)}>
+						<td>{zaposleni.split(" ")[0]}</td>
+						<td>{zaposleni.split(" ")[1]}</td>
+						<td>{poc_odmora}</td>
+						<td>{kraj_odmora}</td>
+						<td>{prvi_radni_dan}</td>
+						<td>{status_zahtjeva}</td>
+						<td>{odobrio}</td>
+						<td><a href={prilog} download>{priglo_title}</a></td>
+						{this.props.isAuthenticated?<td><Link className='btn btn-secondary' to={link_edit}>Edit</Link></td>:""}
+						{this.props.isAuthenticated?<td><Link className='btn btn-secondary' to={link_delete}>Delete</Link></td>:""}
+					</tr>	
+				)
+			});
+		// pagination
+		const numbers =[];
+		let offSetCounter =0;
+		for (let i =1;i<=Math.round(this.state.count/5);i++){
+			if(offSetCounter==0){
+				numbers.push({
+					pageNumber:i,
+					pagelink:"http://localhost:8000/odmor/list/"
+				});
 			}else{
-				prilog_url = prilog;
-				priglo_title = "Prilog";
+				numbers.push({
+					pageNumber:i,
+					pagelink:"http://localhost:8000/odmor/list/?limit=5&offset="+offSetCounter
+				});
 			}
-			const link_edit ='edit/'+item.id;
-			const link_delete='delete/'+item.id;
-			return(
-				<tr key={item.id} style={this.getStyle(item)}>
-					<td>{zaposleni.split(" ")[0]}</td>
-					<td>{zaposleni.split(" ")[1]}</td>
-					<td>{poc_odmora}</td>
-					<td>{kraj_odmora}</td>
-					<td>{prvi_radni_dan}</td>
-					<td>{status_zahtjeva}</td>
-					<td>{odobrio}</td>
-					<td><a href={prilog} download>{priglo_title}</a></td>
-					{this.props.isAuthenticated?<td><Link className='btn btn-secondary' to={link_edit}>Edit</Link></td>:""}
-					{this.props.isAuthenticated?<td><Link className='btn btn-secondary' to={link_delete}>Delete</Link></td>:""}
-				</tr>	
-			)
+			offSetCounter+=5;
+		}
+		const pagination = numbers.map(item=>{
+			if(this.state.currentPage==item.pageNumber){
+				console.log("OVDE SAMMMM")
+				return (<li key={item} className='page-item active'>
+				<a onClick={()=>this.fetchData(item.pagelink,item.pageNumber)} className='page-link'>{item.pageNumber}</a>
+			</li>)
+			}
+			return (<li key={item} className='page-item'>
+			<a onClick={()=>this.fetchData(item.pagelink,item.pageNumber)} className='page-link'>{item.pageNumber}</a>
+		</li>)
+			
 		});
 		return(
 			<div id='odmori'>
@@ -80,6 +136,15 @@ class God_odmori extends Component{
 						{table}
 					</tbody>
 				</table>
+				<div className="float-right">
+					<ul className='pagination'>
+						{this.state.previous?
+						<li className='page-item' onClick={()=>this.fetchData(this.state.previous,this.state.currentPage-1)}><a className='page-link'>Previous</a></li>:""}
+						{pagination}
+						{this.state.next?
+						<li className='page-item' onClick={()=>this.fetchData(this.state.next,this.state.currentPage+1)}><a className='page-link'>Next</a></li>:""}
+					</ul>
+				</div>
 			</div>
 		);
 	}
@@ -88,10 +153,9 @@ class God_odmori extends Component{
 God_odmori.propTypes = {
 	isAuthenticated:PropTypes.bool,
 	loadUser:PropTypes.func.isRequired,
-	odmorList:PropTypes.array.isRequired
+	controlSwitch:PropTypes.func.isRequired
 }
 const mapStateToProps = state =>({
-	isAuthenticated:state.auth.isAuthenticated,
-	odmorList:state.odmor.odmorList
+	isAuthenticated:state.auth.isAuthenticated
 })
-export default connect(mapStateToProps,{loadUser,fetchData})(God_odmori)
+export default connect(mapStateToProps,{loadUser,fetchData,controlSwitch})(God_odmori)
