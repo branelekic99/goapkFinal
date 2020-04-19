@@ -1,4 +1,4 @@
-import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH} from "../actions/types";
+import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH,ERROR_MSG} from "../actions/types";
 import axios from "axios";
 
 
@@ -25,7 +25,7 @@ export function getDetail(id){
 
 export function getZaposleni(){
     return function(dispatch){
-        axios.get("zaposleni/")
+        axios.get("http://localhost:8000/zaposleni/")
         .then(result=>dispatch({
             type:ZAPOSLENI,
             payload:result.data
@@ -108,6 +108,10 @@ export function addOdmor(obj,ime){
         })
         .catch(err=>{
             console.log(err)
+            dispatch({
+                type:ERROR_MSG,
+                payload:err.response.data
+            })
         })
     }
 }

@@ -32,9 +32,9 @@ export function loginUser(obj){
             payload:result.data
         }))
         .catch(err=>{
-            console.log(err);
             dispatch({
-                type:AUTH_ERROR
+                type:AUTH_ERROR,
+                payload:err.response.data
             })
         })
     }

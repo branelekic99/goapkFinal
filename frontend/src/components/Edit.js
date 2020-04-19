@@ -11,7 +11,8 @@ class Edit extends Component{
 		super(props);
 		this.state={
 			zaposleni:[],
-			detailObj:{}
+			detailObj:{},
+			successful_update:false
 		}
 		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -24,6 +25,9 @@ class Edit extends Component{
 	componentWillReceiveProps(nextProps){
 		if(this.state.detailObj !== nextProps.itemDetail){
 			this.setState({detailObj:nextProps.itemDetail})
+		}
+		if(this.state.successful_update !== nextProps.successful_update){
+			this.setState({successful_update:true})
 		}
 	}
 	
@@ -56,10 +60,10 @@ class Edit extends Component{
 		this.props.updateDetail(objekat);
 	}
 	render(){
-		// console.log(this.state.detailObj)
 		if(!this.props.isAuthenticated || this.state.control){
 			return <Redirect to='/'/>
 		}
+		const successful_update = (<div className="alert alert-success" role="alert">Upadated!!</div>)
 		const form = (
 			<form onSubmit={this.handleSubmit}>
 					<div className="form-group">
@@ -99,6 +103,7 @@ class Edit extends Component{
 			<div>
 			<fieldset className="border p-2">
 				<legend className="w-auto">Update</legend>
+					{this.state.successful_update?successful_update:""}
 					{form}
 				</fieldset>
 			</div>
@@ -112,12 +117,14 @@ Edit.propTypes = {
 	zaposleniList:PropTypes.array.isRequired,
 	getZaposleni:PropTypes.func.isRequired,
 	updateDetail:PropTypes.func.isRequired,
-	controlSwitch:PropTypes.bool
+	controlSwitch:PropTypes.bool,
+	successful_update:PropTypes.bool
 }
 const mapStateToProps = state=>({
 	isAuthenticated:state.auth.isAuthenticated,
 	itemDetail:state.odmor.detail,
 	zaposleniList:state.odmor.zaposleni,
-	controlSwitch:state.odmor.controlSwitch
+	controlSwitch:state.odmor.controlSwitch,
+	successful_update:state.odmor.successful_update
 });
 export default connect(mapStateToProps,{getDetail,getZaposleni,updateDetail})(Edit);

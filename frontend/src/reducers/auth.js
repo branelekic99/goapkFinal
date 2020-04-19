@@ -1,7 +1,9 @@
 import {LOAD_USER,AUTH_ERROR,LOGIN_SUCCESS,LOGOUT,CHECK_STATUS} from "../actions/types";
 const initialState = {
     token:localStorage.getItem("token"),
-    isAuthenticated:false
+    isAuthenticated:false,
+    error_status:false,
+    error_msg:[]
 }
 
 export default function(state=initialState,action){
@@ -13,6 +15,21 @@ export default function(state=initialState,action){
                 isAuthenticated:true
             }
         case AUTH_ERROR:
+            localStorage.removeItem("token")
+            console.log(action.payload)
+            let error_msges = [];
+            for( let [key,value] of Object.entries(action.payload)){
+                error_msges.push({
+                    [key]:value
+                })
+            }
+            return{
+                ...state,
+                token:null,
+                isAuthenticated:false,
+                error_status:true,
+                error_msg:error_msges
+            }
         case LOGOUT:
             localStorage.removeItem("token")
             return {

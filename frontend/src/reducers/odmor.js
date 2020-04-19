@@ -1,4 +1,4 @@
-import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH} from "../actions/types";
+import {ODMOR_DETIAL,ZAPOSLENI,ODMOR_UPDATE,ODMOR_LIST,ODMOR_DELETE,ADD_OMDOR,CONTROL_SWITCH,ERROR_MSG} from "../actions/types";
 const initialState = {
     odmorList:[],
     count:0,
@@ -7,7 +7,9 @@ const initialState = {
     detail:{},
     zaposleni:[],
     controlSwitch:false,
-    message:false
+    successful_update:false,
+    error_status:false,
+    error_msg:[]
 }
 
 export default function(state=initialState,action){
@@ -15,7 +17,8 @@ export default function(state=initialState,action){
         case CONTROL_SWITCH:
             return {
                 ...state,
-                controlSwitch:false
+                controlSwitch:false,
+                successful_update:false
             }
         case ODMOR_LIST:
             return {
@@ -37,6 +40,7 @@ export default function(state=initialState,action){
             return{
                 ...state,
                 odmorList:new_list,
+                error_status:false,
                 controlSwitch:true
             }
         case ODMOR_UPDATE:
@@ -47,12 +51,14 @@ export default function(state=initialState,action){
                 const ime = item.zaposleni;
                 return{
                     ...item,
-                    ...action.payload
+                    ...action.payload,
+                    
                 }
             })
             return{
                 ...state,
-                odmorList:obj
+                odmorList:obj,
+                successful_update:true
             }
         case ODMOR_DELETE:
             var id = parseInt(action.payload);
@@ -61,6 +67,13 @@ export default function(state=initialState,action){
                 ...state,
                 odmorList:pom_obj,
                 controlSwitch:true
+            }
+        case ERROR_MSG:
+            const msges = Object.values(action.payload);
+            return {
+                ...state,
+                error_status:true,
+                error_msg:msges
             }
         case ZAPOSLENI:
             return{

@@ -16,7 +16,8 @@ class Obrazac extends Component{
 			date_kra:"",
 			date_prvi_dan:"",
 			prilog:null,
-			control:false
+			control:false,
+			show_err:false
 		}
 		this.handeChangeInput = this.handeChangeInput.bind(this)
 		this.handeSubmit = this.handeSubmit.bind(this)
@@ -28,6 +29,11 @@ class Obrazac extends Component{
 		if(nextProps.controlSwitch !== prevState.control){
 			return{
 				control:nextProps.controlSwitch
+			}
+		}
+		if(nextProps.error_status !== prevState.show_err){
+			return{
+				show_err:nextProps.error_status
 			}
 		}
 		return null;
@@ -63,12 +69,11 @@ class Obrazac extends Component{
 		form_data.append("prvi_radni_dan",this.state.date_prvi_dan);
 		form_data.append("zaposleni",id);
 
-		
 		this.props.addOdmor(form_data,ime);
-		// setTimeout(()=>this.setState({control:true}), 1000);
-	}
+	};
 	
 	render(){
+		
 		if(this.state.control){
 			return <Redirect to='/' />
 		}
@@ -78,8 +83,13 @@ class Obrazac extends Component{
 			}
 			return <option key={item.id}>{item.ime+" "+item.prezime}</option>
 		})
+	const err_msg = this.props.error_msg.map(item=>{
+	return <div className="alert alert-danger" role="alert">{item}</div>
+	});
 		return(
+		
 			<div className="obrazac_form">
+			{this.state.show_err?err_msg:""}
 			<fieldset className="border p-2">
 				<legend className="w-auto">Obrazac</legend>
 				<form onSubmit={this.handeSubmit}>
@@ -91,7 +101,7 @@ class Obrazac extends Component{
 					</div>
 					<div className="form-group">
 						<label>Pocetak odmora</label>
-						<input name='date_poc' type="date" className="form-control" className="form-control"
+						<input name='date_poc' type="date" className="form-control" 
 						value={this.state.date_poc} 
 						onChange={this.handeChangeInput} />
 					</div>
@@ -112,7 +122,7 @@ class Obrazac extends Component{
 						<input type='file' name='prilog' onChange={this.handeChangeInput} className="form-control"/>
 					</div>
 					<div className="form-group">
-					<input type='Submit' value='Submit' className="btn btn-outline-primary" />
+					<input type='Submit' value='Pošalji zahtev' className="btn btn-outline-primary" />
 					</div>
 				</form>
 			</fieldset>
@@ -125,10 +135,14 @@ Obrazac.propTypes = {
 	zaposleniList:PropTypes.array.isRequired,
 	getZaposleni:PropTypes.func.isRequired,
 	addOdmor:PropTypes.func.isRequired,
-	controlSwitch:PropTypes.bool
+	controlSwitch:PropTypes.bool,
+	error_status:PropTypes.bool,
+	error_msg:PropTypes.array
 }
 const mapStateToProps = state=>({
 	zaposleniList:state.odmor.zaposleni,
-	controlSwitch:state.odmor.controlSwitch
+	controlSwitch:state.odmor.controlSwitch,
+	error_status:state.odmor.error_status,
+	error_msg:state.odmor.error_msg
 });
 export default connect(mapStateToProps,{getZaposleni,addOdmor})(Obrazac);

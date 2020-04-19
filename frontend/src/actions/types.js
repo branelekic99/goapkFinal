@@ -12,3 +12,4 @@ export const ODMOR_DELETE = "ODMOR_DELETE";
 export const ADD_OMDOR = "ADD_OMDOR";
 export const ADD_ODMOR_FAIL = 'ADD_ODMOR_FAIL';
 export const CONTROL_SWITCH = "CONTROL_SWITCH";
+export const ERROR_MSG = "ERROR_MSG";
