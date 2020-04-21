@@ -1,6 +1,4 @@
 import React ,{Component} from 'react';
-import './App.css';
-import {Header} from './components/Header';
 import Navigation from './components/Navigation';
 import God_odmori from './components/God_odmori';
 import {Zaposleni} from './components/Zaposleni';
@@ -11,6 +9,9 @@ import Login from "./components/Login";
 import {logOut} from './actions/auth';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import Test from './components/testcomp';
+
+import './App.css';
 
 var ReactRouter = require('react-router-dom')
 var Router = ReactRouter.BrowserRouter;
@@ -20,7 +21,9 @@ var Switch = ReactRouter.Switch;
 class App extends Component{
   render(){
     return (
+      
       <Router>
+        {/* <Test/> */}
           <Navigation />
           <div className="container">
             <Switch>

@@ -18,7 +18,8 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 controlSwitch:false,
-                successful_update:false
+                successful_update:false,
+                error_status:false
             }
         case ODMOR_LIST:
             return {
@@ -48,17 +49,17 @@ export default function(state=initialState,action){
                 if(item.id !== action.payload.id){
                     return item
                 }
-                const ime = item.zaposleni;
                 return{
                     ...item,
                     ...action.payload,
-                    
                 }
             })
             return{
                 ...state,
                 odmorList:obj,
-                successful_update:true
+                detail:action.payload,
+                successful_update:true,
+                error_status:false
             }
         case ODMOR_DELETE:
             var id = parseInt(action.payload);
@@ -70,6 +71,7 @@ export default function(state=initialState,action){
             }
         case ERROR_MSG:
             const msges = Object.values(action.payload);
+            console.log(msges)
             return {
                 ...state,
                 error_status:true,

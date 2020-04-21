@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'knox',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,7 @@ REST_FRAMEWORK = {
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_HOST_USER = 'branislavsteamacc@outlook.com'
-EMAIL_HOST_PASSWORD = 'kasikalopta2'
+EMAIL_HOST_USER = 'emailsender'
+EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 25
 

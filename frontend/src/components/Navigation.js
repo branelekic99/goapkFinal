@@ -1,11 +1,9 @@
 import React , { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-
+import {Link} from "react-router-dom";
 import {logOut} from "../actions/auth";
 import "../styles/nav.css";
-var NavLink = require('react-router-dom').NavLink;
-
 
 class Navigation extends Component{
 	constructor(){
@@ -14,7 +12,7 @@ class Navigation extends Component{
 			isAuthenticated:false
 		}
 	}
-	
+
 	static getDerivedStateFromProps(nextProps,prevState) {
 		if(nextProps.isAuthenticated !== prevState.isAuthenticated){
 			return{
@@ -23,6 +21,7 @@ class Navigation extends Component{
 		}
 		return null;
 	}
+
 	render(){
 		const logout_btn = (
 			<div><button onClick={this.props.logOut} className="btn btn-warning logout-btn">Logout</button></div>
@@ -30,23 +29,22 @@ class Navigation extends Component{
 		return(
 			<div className="navigation">
 				<div className="nav_logo">
-					<NavLink exact activeClassName ='nav_active' to='/' >
+					<Link exact to='/' >
 						GO apk
-					</NavLink>
+					</Link>
 				</div>
 				<div className="navigation_body" id="my_div">
-					<NavLink exact activeClassName ='nav_active' to='/' className="link">
+					<Link exact="true" to='/' className="link">
 							God Odmori
-					</NavLink>
-					<NavLink  activeClassName ='nav_active' to='/zaposleni' className="link">
+					</Link>
+					<Link to='/zaposleni' className="link">
 							Zaposleni
-					</NavLink>
-					<NavLink  activeClassName ='nav_active' to='/obrazac' className="link">
-							Zahtjev
-					</NavLink>
+					</Link>
+					<Link to='/obrazac' className="link">
+							Zahtev
+					</Link>
 					{this.state.isAuthenticated?logout_btn:""}
 				</div>
-				
 			</div>
 		);
 	}

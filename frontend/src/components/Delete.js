@@ -39,20 +39,27 @@ class Delete extends Component{
 	handleSubmit(e){
 		e.preventDefault();
 		let id = this.props.match.params;
-		let zaposleni_id;
-		this.props.zaposleniList.map((item,index)=>{
+		
+		let zaposleni_id = this.props.zaposleniList.map((item,index)=>{
 			let ime = item.ime + " " + item.prezime;
 			if (ime === this.props.itemDetail.zaposleni){
-				zaposleni_id = item.id;
+				return item.id;
 			}
+			return null;
 		})
+		let status = 1;
+		if(this.state.odmorDetail.status_zahteva ==='Usaglasen'){
+			status = 2;
+		}else if(this.state.odmorDetail.status_zahteva === 'Potvrdjen'){
+			status = 3;
+		}
 		let objekat = {
 			"id": id.id,
 		    "zaposleni":zaposleni_id,
 		    "poc_odmora":this.state.odmorDetail.poc_odmora,
 		    "kraj_odmora":this.state.odmorDetail.kraj_odmora,
 		    "prvi_radni_dan":this.state.odmorDetail.prvi_radni_dan,
-		    "status_zahtjeva":this.state.odmorDetail.status_zahtjeva,
+		    "status_zahteva":status,
 		    "odobrio":this.state.odmorDetail.odobrio,
 		}
 
@@ -85,7 +92,7 @@ class Delete extends Component{
 			</div>
 			<div className="form-group">
 				<label>Status zahtjeva</label>
-				<input type="text" value={this.state.odmorDetail.status_zahtjeva} className="form-control" readOnly/>
+				<input type="text" value={this.state.odmorDetail.status_zahteva} className="form-control" readOnly/>
 			</div> 
 			<div className="form-group">
 				<label>Odobrio</label>

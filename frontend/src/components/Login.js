@@ -40,19 +40,19 @@ class Login extends Component{
             return <Redirect to="/" />;
         }
         const username_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item)=='username'){
+                if(Object.keys(item)==='username'){
                    return  <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div>
                 }
                 return "";
         });
         const password_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item)=='password'){
+                if(Object.keys(item)==='password'){
                     return <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div>
                 }
                 return "";
         })
         const other_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item) == 'non_field_errors'){
+                if(Object.keys(item) === 'non_field_errors'){
                 return <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div> 
                 }
                 return "";

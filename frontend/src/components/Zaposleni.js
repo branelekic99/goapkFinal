@@ -29,10 +29,10 @@ export class Zaposleni extends Component{
 			const {ime,prezime,br_dana_go,br_neiskoristenih_dana} = item
 			return (
 				<tr key={index}>
-					<td scope="col">{ime}</td>
-					<td scope="col">{prezime}</td>
-					<td scope="col">{br_dana_go}</td>
-					<td scope="col">{br_neiskoristenih_dana}</td>
+					<td>{ime}</td>
+					<td>{prezime}</td>
+					<td>{br_dana_go}</td>
+					<td>{br_neiskoristenih_dana}</td>
 				</tr>
 			)
 		})

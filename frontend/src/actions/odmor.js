@@ -51,7 +51,13 @@ export function updateDetail(obj){
                payload:result.data
            })
         })
-        .catch(err=>console.log(err))
+        .catch(err=>{
+            console.log(err.response);
+            dispatch({
+                type:ERROR_MSG,
+                payload:err.response.data
+            })
+        })
     }
 };
 

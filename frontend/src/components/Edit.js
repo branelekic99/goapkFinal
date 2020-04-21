@@ -12,7 +12,8 @@ class Edit extends Component{
 		this.state={
 			zaposleni:[],
 			detailObj:{},
-			successful_update:false
+			successful_update:false,
+			show_err:false
 		}
 		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -27,7 +28,10 @@ class Edit extends Component{
 			this.setState({detailObj:nextProps.itemDetail})
 		}
 		if(this.state.successful_update !== nextProps.successful_update){
-			this.setState({successful_update:true})
+			this.setState({successful_update:nextProps.successful_update})
+		}
+		if(this.state.show_err !== nextProps.error_status){
+			this.setState({show_err:nextProps.error_status})
 		}
 	}
 	
@@ -41,20 +45,26 @@ class Edit extends Component{
 	handleSubmit(e){
 		e.preventDefault()
 		let id = this.props.match.params;
-		let zaposleni_id;
-		this.props.zaposleniList.map((item,index)=>{
+		let zaposleni_id=this.props.zaposleniList.map((item,index)=>{
 			let ime = item.ime + " " + item.prezime;
 			if (ime === this.props.itemDetail.zaposleni){
-				zaposleni_id = item.id;
+				return item.id;
 			}
+			return null;
 		})
+		let status = 1;
+		if(this.state.detailObj.status_zahteva === 'Usaglasen'){
+			status = 2;
+		}else if(this.state.detailObj.status_zahteva === 'Potvrdjen'){
+			status = 3;
+		}
 		let objekat ={
 			"id": id.id,
 		    "zaposleni":zaposleni_id,
 		    "poc_odmora":this.state.detailObj.poc_odmora,
 		    "kraj_odmora":this.state.detailObj.kraj_odmora,
 		    "prvi_radni_dan":this.state.detailObj.prvi_radni_dan,
-		    "status_zahtjeva":this.state.detailObj.status_zahtjeva,
+		    "status_zahteva":status,
 		    "odobrio":this.state.detailObj.odobrio,
 		}
 		this.props.updateDetail(objekat);
@@ -63,7 +73,13 @@ class Edit extends Component{
 		if(!this.props.isAuthenticated || this.state.control){
 			return <Redirect to='/'/>
 		}
-		const successful_update = (<div className="alert alert-success" role="alert">Upadated!!</div>)
+		// error display
+		const errors = this.props.error_msg.map((item,index)=>{
+			return <div key={index} className="alert alert-danger" role="alert">{item}</div>
+		});
+		// successeful update msg
+		const successful_update = (<div className="alert alert-success" role="alert">Upadated!!</div>);
+		// forms
 		const form = (
 			<form onSubmit={this.handleSubmit}>
 					<div className="form-group">
@@ -84,7 +100,7 @@ class Edit extends Component{
 					</div>
 					<div className="form-group">
 						<label>Status zahtjeva</label>
-						<select value={this.state.detailObj.status_zahtjeva} name='status_zahtjeva' onChange={this.handleChange} className="form-control">
+						<select value={this.state.detailObj.status_zahteva} name='status_zahteva' onChange={this.handleChange} className="form-control">
 							<option>Planiran</option>
 							<option>Usaglasen</option>
 							<option>Potvrdjen</option>
@@ -104,6 +120,7 @@ class Edit extends Component{
 			<fieldset className="border p-2">
 				<legend className="w-auto">Update</legend>
 					{this.state.successful_update?successful_update:""}
+					{this.state.show_err?errors:""}
 					{form}
 				</fieldset>
 			</div>
@@ -118,13 +135,18 @@ Edit.propTypes = {
 	getZaposleni:PropTypes.func.isRequired,
 	updateDetail:PropTypes.func.isRequired,
 	controlSwitch:PropTypes.bool,
-	successful_update:PropTypes.bool
+	successful_update:PropTypes.bool,
+	error_status:PropTypes.bool,
+	error_msg:PropTypes.array
+
 }
 const mapStateToProps = state=>({
 	isAuthenticated:state.auth.isAuthenticated,
 	itemDetail:state.odmor.detail,
 	zaposleniList:state.odmor.zaposleni,
 	controlSwitch:state.odmor.controlSwitch,
-	successful_update:state.odmor.successful_update
+	successful_update:state.odmor.successful_update,
+	error_status:state.odmor.error_status,
+	error_msg:state.odmor.error_msg
 });
 export default connect(mapStateToProps,{getDetail,getZaposleni,updateDetail})(Edit);

@@ -1,5 +1,60 @@
 .logout-btn{
     position: absolute;
-   top: 20px;
-   right: 10px;
+    top: 20px;
+    right: 20px;
+}
+.navigation{
+	margin:0;   
+	background-color: #292b31;
+	position:relative;
+}
+.nav_logo{
+	left: 30px;
+	padding: 22px;
+	position: absolute;
+	color: #fff;
+	font-size: 25px;
+	font-family: Poppins;
+	text-decoration: none;	
+}
+.navigation_body{
+    overflow: hidden;
+    background-color: #363841;
+    text-align: center;
+    z-index: 6;
+}
+.navigation_icon{
+	display: none;
+}
+.navigation_body .link{
+	display: inline-block;
+	margin-right: -4px; 
+	color: #fff;
+	padding: 22px 22px;
+	text-decoration: none;
+	font-family: Poppins;
+	font-size: 20px;
+}
+.navigation_body .link:hover{
+	background-color: #575b69;
+  	color: #bdfe0e2;
+}
+
+@media screen and (max-width: 820px) {
+    .navigation_body .link{
+        font-size: 16px;
+        padding: 16px 22px;
+    }
+    .nav_logo{
+        font-size: 16px;
+        padding: 16px;
+    }
+    .logout-btn{
+        top: 10px;
+    }
+    .logout-btn input{
+        top: 16px;
+       
+    }
+
 }

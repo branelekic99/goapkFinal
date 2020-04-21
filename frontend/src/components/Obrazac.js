@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from "axios";
 import {Redirect} from 'react-router-dom';
 import {addOdmor} from "../actions/odmor";
 import {getZaposleni} from '../actions/odmor';
@@ -47,16 +46,16 @@ class Obrazac extends Component{
 	}
 	handeSubmit(e){
 		e.preventDefault();
-		var id = 0;
 		var ime = this.state.ime_prezime;
+		var id = 0;
 		if(!this.state.ime_prezime){
-			var e = document.getElementById('selectField');
-			 ime = e.options[e.selectedIndex].value;
+			var evnt = document.getElementById('selectField');
+			 ime = evnt.options[evnt.selectedIndex].value;
 		}
-		this.props.zaposleniList.map((item,index)=>{
+		this.props.zaposleniList.map((item)=>{
 			var naziv = item.ime + " "+item.prezime;
 			if(ime === naziv){
-				id=item.id;
+				id = item.id;
 			}
 		})
 
@@ -78,7 +77,7 @@ class Obrazac extends Component{
 			return <Redirect to='/' />
 		}
 		const options = this.props.zaposleniList.map((item)=>{
-			if(item.id==1){
+			if(item.id===1){
 				return <option key={item.id} selected>{item.ime+" "+item.prezime}</option>
 			}
 			return <option key={item.id}>{item.ime+" "+item.prezime}</option>

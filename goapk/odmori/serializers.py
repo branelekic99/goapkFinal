@@ -12,16 +12,17 @@ class ZaposleniSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Zaposleni
 		fields = "__all__"
-class ZaposleninazivSErilaizer(serializers.ModelSerializer):
-	class Meta:
-		model = Zaposleni
-		fields = ['ime','prezime']
+# class ZaposleninazivSErilaizer(serializers.ModelSerializer):
+# 	class Meta:
+# 		model = Zaposleni
+# 		fields = ['ime','prezime']
 		
 class God_odmoriSerializer(serializers.ModelSerializer):
 	zaposleni = serializers.CharField()
+	status_zahteva = serializers.CharField()
 	class Meta:
 		model = God_odmori
-		fields =['id','zaposleni','poc_odmora','kraj_odmora','prvi_radni_dan','status_zahtjeva','odobrio','prilog']
+		fields =['id','zaposleni','poc_odmora','kraj_odmora','prvi_radni_dan','status_zahteva','odobrio','prilog']
 
 class testsiralizer(serializers.ModelSerializer):
 	zaposleni = serializers.SerializerMethodField()
@@ -30,4 +31,4 @@ class testsiralizer(serializers.ModelSerializer):
 		return str(obj.zaposleni)
 	class Meta:
 		model = God_odmori
-		fields=('id','zaposleni','poc_odmora','kraj_odmora','prvi_radni_dan','status_zahtjeva','odobrio','prilog')
+		fields=('id','zaposleni','poc_odmora','kraj_odmora','prvi_radni_dan','status_zahteva','odobrio','prilog')

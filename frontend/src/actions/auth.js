@@ -17,9 +17,7 @@ export function loadUser(){
             type:LOAD_USER
         }))
         .catch(err=>{
-            dispatch({
-                type:AUTH_ERROR
-            })
+           console.log(err);
         })
     }
 };
