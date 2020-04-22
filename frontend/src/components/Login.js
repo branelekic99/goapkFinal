@@ -39,21 +39,24 @@ class Login extends Component{
         if(this.props.isAuthenticated===true){
             return <Redirect to="/" />;
         }
+        const test = this.props.error_msg.map(item=>{
+            return console.log(item)
+        })
         const username_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item)==='username'){
-                   return  <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div>
+                if(Object.keys(item)=='username'){
+                    return  <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div>
                 }
                 return "";
         });
         const password_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item)==='password'){
+                if(Object.keys(item) == 'password'){
                     return <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div>
                 }
                 return "";
         })
         const other_err = this.props.error_msg.map(item=>{
-                if(Object.keys(item) === 'non_field_errors'){
-                return <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div> 
+                if(Object.keys(item) == 'non_field_errors'){
+                    return <div className="alert alert-danger form-box" role="alert">{Object.values(item)}</div> 
                 }
                 return "";
         })

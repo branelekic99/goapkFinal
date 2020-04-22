@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_save,pre_save
 from django.core.mail import send_mail
 
 class Zaposleni(models.Model):
@@ -30,16 +29,5 @@ class God_odmori(models.Model):
 	def save(self,*args,**kwargs):
 		super(God_odmori,self).save(*args,**kwargs)
 
-
-# def god_odmori_emailSend(sender,instance,**kwargs):
-# 	zaposleni = instance.zaposleni.ime + " " + instance.zaposleni.prezime
-# 	url = "http://localhost:3000/detail/"+str(instance.id)
-# 	send_mail("Zahtjev godisnjeg odmora",
-# 		url,
-# 		'branislavsteamacc@outlook.com',
-# 		['branisalekic@hotmail.com'],fail_silently=False)
-
-
-# post_save.connect(god_odmori_emailSend,sender=God_odmori)
 
 # Create your models here.

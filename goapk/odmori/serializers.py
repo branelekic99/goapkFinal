@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.mixins import DestroyModelMixin,UpdateModelMixin
 from . models import Zaposleni,God_odmori
-import json
 from django.core.mail import send_mail
 
 class God_odmoriCreateSerializer(serializers.ModelSerializer):
@@ -17,7 +16,7 @@ class God_odmoriCreateSerializer(serializers.ModelSerializer):
 		send_mail("Zahtjev godisnjeg odmora",
 			url,
 			'branislavtestsender@outlook.com',
-			['branisalekic@hotmail.com'],fail_silently=False)
+			['branislavtestsender@outlook.com'],fail_silently=False)
 		return obj
 
 class ZaposleniSerializer(serializers.ModelSerializer):
@@ -32,7 +31,7 @@ class God_odmoriSerializer(serializers.ModelSerializer):
 		model = God_odmori
 		fields =['id','zaposleni','poc_odmora','kraj_odmora','prvi_radni_dan','status_zahteva','odobrio','prilog']
 
-class testsiralizer(serializers.ModelSerializer):
+class UpdateDestorySerializer(serializers.ModelSerializer):
 	zaposleni = serializers.SerializerMethodField()
 
 	def get_zaposleni(self,obj):

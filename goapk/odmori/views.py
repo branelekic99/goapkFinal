@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .serializers import God_odmoriSerializer,God_odmoriCreateSerializer,ZaposleniSerializer,testsiralizer
+from .serializers import God_odmoriSerializer,God_odmoriCreateSerializer,ZaposleniSerializer,UpdateDestorySerializer
 from .models import God_odmori,Zaposleni
 from rest_framework.generics import (
 	ListAPIView,
@@ -11,10 +11,8 @@ from rest_framework.generics import (
 	)
 from rest_framework import permissions
 from rest_framework.mixins import DestroyModelMixin,UpdateModelMixin
-from rest_framework.response import Response
 from .pagionation import OdmorPagination
 from datetime import date,datetime
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework import status
@@ -37,9 +35,6 @@ class GOListAPIView(ListAPIView):
 class GODetailAPIView(RetrieveAPIView):
 	queryset = God_odmori.objects.all()
 	serializer_class =God_odmoriSerializer
-	permission_classes = [
-		permissions.IsAuthenticated
-	]
 
 class ZaposleniListAPIView(ListAPIView):
 	queryset = Zaposleni.objects.all()
@@ -47,10 +42,10 @@ class ZaposleniListAPIView(ListAPIView):
 
 class TaskUpdate(DestroyModelMixin,UpdateModelMixin,RetrieveAPIView):
 	queryset = God_odmori.objects.all()
-	serializer_class = testsiralizer
+	serializer_class = UpdateDestorySerializer
 
 	def put(self,request,*args,**kwargs):
-		serializer = testsiralizer(data=request.data)
+		serializer = UpdateDestorySerializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		data = serializer.validated_data
 		status_zahteva = data['status_zahteva']

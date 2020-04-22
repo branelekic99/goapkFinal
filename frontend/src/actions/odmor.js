@@ -4,15 +4,16 @@ import axios from "axios";
 
 export function getDetail(id){
     return function(dispatch,getState){
-        const token = getState().auth.token;
-        const header = "Token "+ token;
+        // const token = getState().auth.token;
+        // const header = "Token "+ token;
         const url = "http://localhost:8000/odmor/detail/"+id;
-        axios.get(url,{
-            headers:{
-                'Content-Type':'application/json',
-                "Authorization":header
-            }
-        })
+        // axios.get(url,{
+        //     headers:{
+        //         'Content-Type':'application/json',
+        //         "Authorization":header
+        //     }
+        // })
+        axios.get(url)
         .then(result=>{
             dispatch({
                 type:ODMOR_DETIAL,
