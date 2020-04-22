@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 import {getDetail} from '../actions/odmor';
 import {getZaposleni} from '../actions/odmor';
 import {updateDetail} from "../actions/odmor";
+import {loadUser} from "../actions/auth";
 
 class Edit extends Component{
 	constructor(props){
@@ -20,6 +21,7 @@ class Edit extends Component{
 	}
 	componentDidMount(){
 		const { id } = this.props.match.params
+		this.props.loadUser();
 		this.props.getDetail(id);
 		this.props.getZaposleni();
 	}
@@ -78,7 +80,7 @@ class Edit extends Component{
 			return <div key={index} className="alert alert-danger" role="alert">{item}</div>
 		});
 		// successeful update msg
-		const successful_update = (<div className="alert alert-success" role="alert">Upadated!!</div>);
+		const successful_update = (<div className="alert alert-success" role="alert">Successfully Updated!!</div>);
 		// forms
 		const form = (
 			<form onSubmit={this.handleSubmit}>
@@ -128,6 +130,7 @@ class Edit extends Component{
 	}
 };
 Edit.propTypes = {
+	loadUser:PropTypes.func.isRequired,
 	isAuthenticated:PropTypes.bool.isRequired,
 	getDetail:PropTypes.func.isRequired,
 	itemDetail:PropTypes.object.isRequired,
@@ -149,4 +152,4 @@ const mapStateToProps = state=>({
 	error_status:state.odmor.error_status,
 	error_msg:state.odmor.error_msg
 });
-export default connect(mapStateToProps,{getDetail,getZaposleni,updateDetail})(Edit);
+export default connect(mapStateToProps,{getDetail,getZaposleni,updateDetail,loadUser})(Edit);

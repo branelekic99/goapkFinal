@@ -9,7 +9,7 @@ import Login from "./components/Login";
 import {logOut} from './actions/auth';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Test from './components/testcomp';
+import Detail from './components/Detail';
 
 import './App.css';
 
@@ -23,7 +23,7 @@ class App extends Component{
     return (
       
       <Router>
-        {/* <Test/> */}
+        
           <Navigation />
           <div className="container">
             <Switch>
@@ -33,6 +33,7 @@ class App extends Component{
               <Route path='/edit/:id' component={Edit} />
               <Route path='/delete/:id' component={Delete} />
               <Route path='/login' component={Login}/>
+              <Route path="/detail/:id" component={Detail} />
               <Route render = {function(){
                 return <p>Not Found </p>
               }}/>

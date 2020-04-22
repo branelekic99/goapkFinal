@@ -126,6 +126,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'prilog')
+MEDIA_URL = "/prilog/"
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
@@ -134,7 +137,7 @@ REST_FRAMEWORK = {
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_HOST_USER = 'emailsender'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_USER = 'branislavtestsender@outlook.com'
+EMAIL_HOST_PASSWORD = 'patka123'
 EMAIL_PORT = 25
 

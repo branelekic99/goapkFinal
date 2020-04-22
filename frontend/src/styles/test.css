@@ -1,9 +1,43 @@
-.dropdown-submenu {
-    position: relative;
-  }
-  
-  .dropdown-submenu .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -1px;
-  }
+
+.filterSort-menu a:hover{
+  text-decoration: none;
+  color: black;
+}
+.filterSort-menu ul{
+  list-style: none;
+  text-decoration: none;
+}       
+.filterSort-menu ul li{ 
+  width: 200px; 
+  background: #2e2e2e; 
+  float: left; 
+  height: 35px; 
+  line-height: 35px; 
+  text-align: center; 
+  margin-right: 2px; 
+  position: relative;
+  border-radius: 5px;
+}
+            
+.filterSort-menu ul li:hover{ 
+  color: black;
+}
+.filterSort-menu ul li:hover li{
+  background-color: #878787
+}
+            
+.filterSort-menu ul li a{
+  color: #fff; 
+  text-decoration: none; 
+  font-family: sans-serif; 
+  display: block;
+}
+            
+.filterSort-menu ul li ul{display: none;}
+            
+.filterSort-menu ul li:hover ul{ display: block;}
+            
+.filterSort-menu ul li ul .itam-2{position: absolute; left: 202px; top: 0; display: none;}
+            
+.filterSort-menu ul li ul li:last-child:hover .itam-2{display: block;}
+            

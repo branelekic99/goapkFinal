@@ -10,11 +10,12 @@ class Zaposleni(models.Model):
 
 	def __str__(self):
 		return self.ime +' '+self.prezime
+
 class StatusTable(models.Model):
 	status = models.CharField(max_length=20)
 
 	def __str__(self):
-	 return self.status
+	 	return self.status
 
 DEFAULT_STATUS = 1
 class God_odmori(models.Model):
@@ -22,7 +23,6 @@ class God_odmori(models.Model):
 	poc_odmora = models.DateField()
 	kraj_odmora = models.DateField()
 	prvi_radni_dan = models.DateField()
-	# status_zahtjeva = models.CharField(max_length=30,choices=STATUS,default="Planiran")
 	status_zahteva = models.ForeignKey(StatusTable,on_delete=models.DO_NOTHING,default=DEFAULT_STATUS)
 	odobrio = models.CharField(max_length=40,default='admin')
 	prilog = models.FileField(upload_to ='prilog',blank=True)

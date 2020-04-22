@@ -55,7 +55,7 @@ class TaskUpdate(DestroyModelMixin,UpdateModelMixin,RetrieveAPIView):
 		data = serializer.validated_data
 		status_zahteva = data['status_zahteva']
 		god_odmor = God_odmori.objects.get(id=kwargs['pk'])
-		if(status_zahteva.id<god_odmor.status_zahteva.id):
+		if(status_zahteva.id<god_odmor.status_zahteva.id or status_zahteva.id>god_odmor.status_zahteva.id+1):
 			return Response(
 					{'detail':"Nedozvoljena operacija"},
 					status=status.HTTP_400_BAD_REQUEST
