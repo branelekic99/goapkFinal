@@ -8,9 +8,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path('odmor/create/',GOCreateAPIView.as_view()),
-    path('odmor/detail/<str:pk>/',GODetailAPIView.as_view()),
-    path('odmor/update/<str:pk>/',TaskUpdate.as_view()),
-    path("odmor/list/",GOListAPIView.as_view()),
+    path('create/',GOCreateAPIView.as_view()),
+    path('detail/<str:pk>/',GODetailAPIView.as_view()),
+    path('update/<str:pk>/',TaskUpdate.as_view()),
+    path("list/",GOListAPIView.as_view()),
     path('zaposleni/',ZaposleniListAPIView.as_view())
 ]

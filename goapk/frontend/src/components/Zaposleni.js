@@ -12,7 +12,7 @@ export class Zaposleni extends Component{
 		this.fetchdata()
 	}
 	fetchdata(){
-		fetch('http://localhost:8000/zaposleni/')
+		fetch('http://localhost:8000/odmor/zaposleni/')
 		.then(response =>response.json())
 		.then(data=>
 			this.setState({zaposleni:data})

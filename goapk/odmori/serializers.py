@@ -2,6 +2,20 @@ from rest_framework import serializers
 from rest_framework.mixins import DestroyModelMixin,UpdateModelMixin
 from . models import Zaposleni,God_odmori
 from django.core.mail import send_mail
+from threading import Thread
+
+def background_proces(function):
+	def decorator(*args,**kwargs):
+		t = Thread(target=function,args=args,kwargs=kwargs)
+		t.start()
+	return decorator
+
+@background_proces
+def send_mailFunc(url):
+	send_mail("Zahtjev godisnjeg odmora",
+			url,
+			'branislavtestsender@outlook.com',
+			['branislavtestsender@outlook.com'],fail_silently=False)
 
 class God_odmoriCreateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -13,10 +27,7 @@ class God_odmoriCreateSerializer(serializers.ModelSerializer):
 		obj = God_odmori.objects.create(**validated_data)
 		id = obj.id
 		url = "http://localhost:3000/detail/"+str(id)
-		send_mail("Zahtjev godisnjeg odmora",
-			url,
-			'branislavtestsender@outlook.com',
-			['branislavtestsender@outlook.com'],fail_silently=False)
+		send_mailFunc(url)
 		return obj
 
 class ZaposleniSerializer(serializers.ModelSerializer):
