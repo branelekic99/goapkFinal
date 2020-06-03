@@ -11,7 +11,7 @@ from rest_framework.generics import (
 	)
 from rest_framework import permissions
 from rest_framework.mixins import DestroyModelMixin,UpdateModelMixin
-from .pagionation import OdmorPagination
+from .pagionation import OdmorPagination, OdmorZaposleniPagination
 from datetime import date,datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -39,6 +39,8 @@ class GODetailAPIView(RetrieveAPIView):
 class ZaposleniListAPIView(ListAPIView):
 	queryset = Zaposleni.objects.all()
 	serializer_class = ZaposleniSerializer
+	pagination_class = OdmorZaposleniPagination
+
 
 class TaskUpdate(DestroyModelMixin,UpdateModelMixin,RetrieveAPIView):
 	queryset = God_odmori.objects.all()

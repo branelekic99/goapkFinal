@@ -28,7 +28,7 @@ class God_odmori extends Component{
 	}
 	componentDidMount(){
 		this.props.controlSwitch();
-		let fullUrl="http://localhost:8000/odmor/list/?";
+		let fullUrl="/odmor/list/?";
 		if(this.state.orderingUrl){
 			fullUrl = fullUrl+this.state.orderingUrl;
 		}
@@ -49,7 +49,7 @@ class God_odmori extends Component{
 		.catch(err=>console.log(err))
 	}
 	setOrdering(string){
-		let url ="http://localhost:8000/odmor/list/?";
+		let url ="/odmor/list/?";
 		if(this.state.filterUrl){
 			url = url + string+"&"+this.state.filterUrl
 		}else{
@@ -59,7 +59,7 @@ class God_odmori extends Component{
 		this.setState({orderingUrl:string});
 	}
 	setFilter(string){
-		let url ="http://localhost:8000/odmor/list/?";
+		let url ="/odmor/list/?";
 		if(this.state.orderingUrl){
 			url = url + string+"&"+this.state.orderingUrl
 		}else{
@@ -143,25 +143,25 @@ class God_odmori extends Component{
 				if(this.state.orderingUrl && this.state.filterUrl){
 					numbers.push({
 						pageNumber:i,
-						pagelink:"http://localhost:8000/odmor/list/?"+this.state.orderingUrl+"&"+this.state.filterUrl
+						pagelink:"/odmor/list/?"+this.state.orderingUrl+"&"+this.state.filterUrl
 					});
 				}else{
 					numbers.push({
 						pageNumber:i,
-						pagelink:"http://localhost:8000/odmor/list/?"+this.state.orderingUrl+this.state.filterUrl
+						pagelink:"/odmor/list/?"+this.state.orderingUrl+this.state.filterUrl
 					});
 				}
 			}else{
 				if(this.state.orderingUrl && this.state.filterUrl){
 					numbers.push({
 						pageNumber:i,
-						pagelink:"http://localhost:8000/odmor/list/?limit=10&offset="
+						pagelink:"/odmor/list/?limit=10&offset="
 						+offSetCounter+"&"+this.state.orderingUrl+"&"+this.state.filterUrl
 					});
 				}else{
 					numbers.push({
 						pageNumber:i,
-						pagelink:"http://localhost:8000/odmor/list/?limit=10&offset="
+						pagelink:"/odmor/list/?limit=10&offset="
 						+offSetCounter+"&"+this.state.orderingUrl+this.state.filterUrl
 					});
 				}

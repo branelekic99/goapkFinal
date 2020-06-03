@@ -7,7 +7,7 @@ export function loadUser(){
     return function(dispatch,getState){
         const token = getState().auth.token;
         const header = "Token "+ token;
-        axios("http://localhost:8000/api/auth/user",{
+        axios("/api/auth/user",{
             headers:{
                 'Content-Type':'aplication/json',
                 "Authorization":header
@@ -24,7 +24,7 @@ export function loadUser(){
 
 export function loginUser(obj){
     return function(dispatch){
-        axios.post("http://localhost:8000/api/auth/login",obj)
+        axios.post("/api/auth/login",obj)
         .then(result=>dispatch({
             type:LOGIN_SUCCESS,
             payload:result.data
@@ -41,7 +41,7 @@ export function logOut(){
     return function(dispatch,getState){
         const token = getState().auth.token;
         const header = "Token "+ token;
-        axios.post("http://localhost:8000/api/auth/logout",null,{
+        axios.post("/api/auth/logout",null,{
             headers:{
                 'Content-Type':'aplication/json',
                 "Authorization":header

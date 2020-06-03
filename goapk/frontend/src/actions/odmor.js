@@ -4,7 +4,7 @@ import axios from "axios";
 
 export function getDetail(id){
     return function(dispatch,getState){
-        const url = "http://localhost:8000/odmor/detail/"+id+"/";
+        const url = "/odmor/detail/"+id+"/";
         axios.get(url)
         .then(result=>{
             dispatch({
@@ -18,12 +18,13 @@ export function getDetail(id){
 
 export function getZaposleni(){
     return function(dispatch){
-        axios.get("http://localhost:8000/odmor/zaposleni/")
-        .then(result=>dispatch({
-            type:ZAPOSLENI,
-            payload:result.data
-        }))
-        .catch(err=>console.log(err))
+        axios.get("/odmor/zaposleni/")
+        .then(result=>{
+            dispatch({
+                type:ZAPOSLENI,
+                payload:result.data.results
+            })
+        }).catch(err=>console.log(err))
     }
 };
 
@@ -31,7 +32,7 @@ export function updateDetail(obj){
     return function(dispatch,getState){
         const token = getState().auth.token;
         const header = "Token "+ token;
-        const url = "http://localhost:8000/odmor/update/"+obj.id+"/";
+        const url = "/odmor/update/"+obj.id+"/";
         axios.put(url,obj,{
             headers:{
                 'Content-Type':'application/json',
@@ -56,7 +57,7 @@ export function updateDetail(obj){
 
 export function fetchData(){
     return function(dispatch){
-        fetch("localhost:8000/odmor/list/")
+        fetch("/odmor/list/")
         .then(result=>{
             dispatch({
                 type:ODMOR_LIST,
@@ -78,7 +79,7 @@ export function deleteData(obj){
     return function(dispatch,getState){
         const token = getState().auth.token;
         const header = "Token "+ token;
-        const url = "http://localhost:8000/odmor/update/"+obj.id+"/";
+        const url = "/odmor/update/"+obj.id+"/";
         axios.delete(url,obj,{
             headers:{
                 'Content-Type':'application/json',
@@ -97,7 +98,7 @@ export function deleteData(obj){
 
 export function addOdmor(obj,ime){
     return function(dispatch){
-        axios.post("http://localhost:8000/odmor/create/",obj)
+        axios.post("/odmor/create/",obj)
         .then(response=>{
             response.data.zaposleni=ime
           dispatch({
